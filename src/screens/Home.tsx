@@ -6,12 +6,7 @@ import { useState } from 'react'
 
 export const Home: React.FC = () => {
   const [groups, setGroups] = useState(['Costas', 'Bíceps', 'Tríceps', 'Ombro'])
-  const [exercises, setExercises] = useState([
-    'Costas',
-    'Bíceps',
-    'Tríceps',
-    'Ombro',
-  ])
+  const [exercises, setExercises] = useState(['Costas'])
 
   const [groupSelected, setGroupSelected] = useState('Costas')
 
@@ -26,8 +21,7 @@ export const Home: React.FC = () => {
           <Group
             name={item}
             isActive={
-              String(groupSelected).toLocaleUpperCase() ===
-              String(item).toLocaleUpperCase()
+              groupSelected.toLocaleUpperCase() === item.toLocaleUpperCase()
             }
             onPress={() => setGroupSelected(item)}
           />
