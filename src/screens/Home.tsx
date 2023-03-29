@@ -1,14 +1,21 @@
 import { ExerciseCard } from '@components/ExerciseCard'
 import { Group } from '@components/Group'
 import { HomeHeader } from '@components/HomeHeader'
+import { useNavigation } from '@react-navigation/native'
+import { AppNavigationRoutesProps } from '@routes/app.routes'
 import { FlatList, Heading, HStack, VStack, Text } from 'native-base'
 import { useState } from 'react'
 
 export const Home: React.FC = () => {
+  const navigation = useNavigation<AppNavigationRoutesProps>()
+
   const [groups, setGroups] = useState(['Costas', 'Bíceps', 'Tríceps', 'Ombro'])
   const [exercises, setExercises] = useState(['Costas'])
-
   const [groupSelected, setGroupSelected] = useState('Costas')
+
+  const handleOpenExercises = () => {
+    navigation.navigate('exercise')
+  }
 
   return (
     <VStack flex={1}>
@@ -31,6 +38,7 @@ export const Home: React.FC = () => {
         _contentContainerStyle={{ px: 8 }}
         my={10}
         maxH={10}
+        minH={10}
       />
       <VStack flex={1} px={8}>
         <HStack justifyContent="space-between" mb={5}>
@@ -45,7 +53,9 @@ export const Home: React.FC = () => {
         <FlatList
           data={exercises}
           keyExtractor={(item) => item}
-          renderItem={({ item }) => <ExerciseCard />}
+          renderItem={({ item }) => (
+            <ExerciseCard onPress={handleOpenExercises} />
+          )}
           showsVerticalScrollIndicator={false}
           _contentContainerStyle={{ paddingBottom: 20 }}
         />

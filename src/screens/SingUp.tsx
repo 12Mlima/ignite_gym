@@ -6,9 +6,12 @@ import { Button } from '@components/Button'
 import { Input } from '@components/Input'
 import { AuthNavigationRoutesProps } from '@routes/auth.routes'
 import { useNavigation } from '@react-navigation/native'
+import { useForm, Controller } from 'react-hook-form'
 
 export const SignUp: React.FC = () => {
   const navigation = useNavigation<AuthNavigationRoutesProps>()
+
+  const { watch, control } = useForm()
 
   function handleLogin() {
     navigation.navigate('signIn')
@@ -44,13 +47,27 @@ export const SignUp: React.FC = () => {
           >
             Crie sua conta
           </Heading>
-          <Input placeholder="Nome" />
+          <Input control={control} name="name" placeholder="Nome" />
           <Input
+            control={control}
+            name="email"
             placeholder="E-mail"
             keyboardType="email-address"
             autoCapitalize="none"
           />
-          <Input placeholder="Senha" secureTextEntry />
+          <Input
+            control={control}
+            name="password"
+            placeholder="Senha"
+            secureTextEntry
+          />
+
+          <Input
+            control={control}
+            name="password_confirm"
+            placeholder="Confirme a Senha"
+            secureTextEntry
+          />
 
           <Button title="Criar e acessar" />
         </Center>

@@ -2,6 +2,8 @@ import { Button } from '@components/Button'
 import { Input } from '@components/Input'
 import { ScreenHeader } from '@components/ScreenHeader'
 import { UsePhoto } from '@components/UserPhoto'
+import * as ImagePicker from 'expo-image-picker'
+import * as FileSystem from 'expo-file-system'
 import {
   Center,
   ScrollView,
@@ -9,14 +11,53 @@ import {
   Skeleton,
   Text,
   Heading,
+  useToast,
 } from 'native-base'
 import { useState } from 'react'
-import { TouchableOpacity } from 'react-native'
+import { TouchableOpacity, Alert } from 'react-native'
+import { useForm } from 'react-hook-form'
 
 const PHOTO_SIZE = 33
 
 export const Profile: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false)
+  const [userPhoto, setUserPhoto] = useState<any>()
+
+  const toast = useToast()
+  const { watch, control } = useForm()
+
+  const handleUserPhoto = async () => {
+    setIsLoading(true)
+
+    try {
+      const photoUser = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect: [4, 4],
+        allowsEditing: true,
+      })
+
+      if (photoUser.canceled) {
+        return
+      }
+
+      if (photoUser.assets[0].uri) {
+        const photoInfo = await FileSystem.getInfoAsync(photoUser.assets[0].uri)
+
+        if (photoInfo.size && photoInfo.size / 1024 / 1024 > 5) {
+          return toast.show({
+            title: 'Essa imagem é muito grande. Esolha uma de até 5mb.',
+            placement: 'top',
+            bgColor: 'red.500',
+          })
+        }
+        setUserPhoto(photoUser.assets[0].uri)
+      }
+    } catch (error) {
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <VStack flex={1}>
@@ -33,13 +74,13 @@ export const Profile: React.FC = () => {
             />
           ) : (
             <UsePhoto
-              source={{ uri: 'https://github.com/12Mlima.png' }}
+              source={{ uri: userPhoto }}
               alt="foto do usuário"
               size={PHOTO_SIZE}
             />
           )}
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleUserPhoto}>
             <Text
               color={'green.500'}
               fontWeight={'bold'}
@@ -51,8 +92,14 @@ export const Profile: React.FC = () => {
             </Text>
           </TouchableOpacity>
 
-          <Input placeholder="Nome" bg={'gray.600'} />
-          <Input placeholder="E-mail" bg={'gray.600'} isDisabled />
+          <Input control={control} name="" placeholder="Nome" bg={'gray.600'} />
+          <Input
+            control={control}
+            name=""
+            placeholder="E-mail"
+            bg={'gray.600'}
+            isDisabled
+          />
         </Center>
 
         <VStack px={10} mt={12} mb={9}>
@@ -60,9 +107,23 @@ export const Profile: React.FC = () => {
             Alterar senha
           </Heading>
 
-          <Input placeholder="Senha antiga" bg={'gray.600'} secureTextEntry />
-          <Input placeholder="Nova senha" bg={'gray.600'} secureTextEntry />
           <Input
+            control={control}
+            name=""
+            placeholder="Senha antiga"
+            bg={'gray.600'}
+            secureTextEntry
+          />
+          <Input
+            control={control}
+            name=""
+            placeholder="Nova senha"
+            bg={'gray.600'}
+            secureTextEntry
+          />
+          <Input
+            control={control}
+            name=""
             placeholder="Confirme a nova senha"
             bg={'gray.600'}
             secureTextEntry

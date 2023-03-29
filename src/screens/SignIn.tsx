@@ -5,9 +5,12 @@ import { Input } from '@components/Input'
 import { Button } from '@components/Button'
 import { useNavigation } from '@react-navigation/native'
 import { AuthNavigationRoutesProps } from '@routes/auth.routes'
+import { useForm } from 'react-hook-form'
 
 export const SignIn: React.FC = () => {
   const navigation = useNavigation<AuthNavigationRoutesProps>()
+
+  const { watch, control } = useForm()
 
   function handleNewAccount() {
     navigation.navigate('signUp')
@@ -45,11 +48,18 @@ export const SignIn: React.FC = () => {
           </Heading>
 
           <Input
+            control={control}
+            name="email"
             placeholder="E-mail"
             keyboardType="email-address"
             autoCapitalize="none"
           />
-          <Input placeholder="Senha" secureTextEntry />
+          <Input
+            control={control}
+            name="password"
+            placeholder="Senha"
+            secureTextEntry
+          />
 
           <Button title="Acessar" />
         </Center>
