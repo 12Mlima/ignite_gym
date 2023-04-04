@@ -6,15 +6,42 @@ import { Button } from '@components/Button'
 import { Input } from '@components/Input'
 import { AuthNavigationRoutesProps } from '@routes/auth.routes'
 import { useNavigation } from '@react-navigation/native'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
-export const SignUp: React.FC = () => {
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+
+type FormDataProps = {
+  name: string
+  email: string
+  password: string
+  password_confirm: string
+}
+
+const schema = yup
+  .object({
+    name: yup.string().required('Informe o nome'),
+    email: yup.string().email('E-mail inválido').required('Informe o e-mail'),
+    password: yup
+      .string()
+      .required('Digite uma senha')
+      .min(6, 'Senha deve ter no mínimo 6 digitos'),
+    password_confirm: yup
+      .string()
+      .required('Confirme a senha')
+      .oneOf([yup.ref('password')], 'A confirmação de senha não confere'),
+  })
+  .required()
+
+export const SignUp: React.FC<FormDataProps> = () => {
   const navigation = useNavigation<AuthNavigationRoutesProps>()
 
-  const { watch, control } = useForm()
+  const { watch, control, handleSubmit } = useForm({
+    resolver: yupResolver(schema),
+  })
 
-  function handleLogin() {
-    navigation.navigate('signIn')
+  const handleSignUp = (data: any) => {
+    console.log(data)
   }
 
   return (
@@ -67,16 +94,21 @@ export const SignUp: React.FC = () => {
             name="password_confirm"
             placeholder="Confirme a Senha"
             secureTextEntry
+            onSubmitEditing={handleSubmit(handleSignUp)}
+            returnKeyType="send"
           />
 
-          <Button title="Criar e acessar" />
+          <Button
+            title="Criar e acessar"
+            onPress={handleSubmit(handleSignUp)}
+          />
         </Center>
 
         <Button
           title="Voltar para o login"
           variant="outline"
-          mt={24}
-          onPress={handleLogin}
+          mt={12}
+          onPress={() => navigation.goBack()}
         />
       </VStack>
     </ScrollView>

@@ -13,7 +13,12 @@ export const HistoryCard: React.FC = () => {
       justifyContent="space-between"
     >
       <VStack mr={5} flex={1}>
-        <Heading fontSize="md" textTransform="capitalize" numberOfLines={1}>
+        <Heading
+          fontSize="md"
+          textTransform="capitalize"
+          numberOfLines={1}
+          fontFamily={'heading'}
+        >
           Costas
         </Heading>
         <Text color={'gray.100'} fontSize="lg" numberOfLines={1}>

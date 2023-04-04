@@ -34,7 +34,12 @@ export const Exercise: React.FC = () => {
           mb={8}
           justifyContent={'space-between'}
         >
-          <Heading color={'gray.100'} fontSize="lg" flexShrink={1}>
+          <Heading
+            color={'gray.100'}
+            fontSize="lg"
+            flexShrink={1}
+            fontFamily={'heading'}
+          >
             Puxada Frontal
           </Heading>
 

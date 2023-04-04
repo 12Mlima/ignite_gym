@@ -1,5 +1,5 @@
 import { Heading, HStack, Text, VStack, Icon } from 'native-base'
-import { UsePhoto } from './UserPhoto'
+import { UsePhoto } from '../UserPhoto'
 import { MaterialIcons } from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native'
 
@@ -16,7 +16,7 @@ export const HomeHeader: React.FC = () => {
         <Text color="gray.100" fontSize="md">
           Olá,
         </Text>
-        <Heading color="gray.100" fontSize="md">
+        <Heading color="gray.100" fontSize="md" fontFamily={'heading'}>
           Marsel
         </Heading>
       </VStack>
